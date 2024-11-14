@@ -1,3 +1,6 @@
+import 'package:app_todo_list/my_theme.dart';
+import 'package:app_todo_list/routing/app_router.dart';
+import 'package:app_todo_list/routing/routes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,6 +14,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      initialRoute: Routes.home,
+      onGenerateRoute: AppRouter.generateRoute,
+
+      theme: MyTheme.lightMode,
     );
   }
 }
