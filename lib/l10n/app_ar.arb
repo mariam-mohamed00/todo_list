@@ -1,0 +1,19 @@
+{
+"language" : "اللغة",
+"english" : "الانجليزية",
+"arabic" : "العربية",
+"theme" : "النمط",
+"light" : "نهاري",
+"dark" : "ليلي",
+"to_do_list" : "المهام",
+"task_title" : "العنوان",
+"task_desc" : "الوصف",
+"delete" : "حذف",
+"add_new_task" : "اضافة مهمة جديدة",
+"enter_task_title" : "ادخل عنوان المهمة",
+"enter_task_desc" : "ادخل وصف المهمة",
+"title_error" : "من فضلك ادخل عنوان المهمة",
+"desc_error" : "من فضلك ادخل وصف المهمة",
+"select_time" : "اختر وقت",
+"add" : "اضافة"
+}
