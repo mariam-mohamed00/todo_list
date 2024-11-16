@@ -1,0 +1,19 @@
+{
+"language" : "Language",
+"english" : "English",
+"arabic" : "Arabic",
+"theme" : "Theme",
+"light" : "Light",
+"dark" : "Dark",
+"to_do_list" : "To Do List",
+"task_title" : "Task Title",
+"task_desc" : "Task description",
+"delete" : "Delete",
+"add_new_task" : "Add new task",
+"enter_task_title" : "Enter Task Title",
+"enter_task_desc" : "Enter Task Description",
+"title_error" : "please enter task title",
+"desc_error" : "please enter task description",
+"select_time" : "Select Time",
+"add" : "Add"
+}
