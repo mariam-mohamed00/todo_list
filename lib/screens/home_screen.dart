@@ -6,6 +6,7 @@ import 'package:app_todo_list/screens/tabs/setting_tab/setting_tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -31,7 +32,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
-        color: provider.appTheme == ThemeMode.light? MyTheme.whiteColor : MyTheme.blackDark,
+        color: provider.appTheme == ThemeMode.light
+            ? MyTheme.whiteColor
+            : MyTheme.blackDark,
         notchMargin: 8,
         child: BottomNavigationBar(
             currentIndex: index,
@@ -50,8 +53,12 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-             backgroundColor: provider.appTheme == ThemeMode.light ? MyTheme.whiteColor : MyTheme.backgroundDark,
-            context: context, builder: (context) => const AddTaskBottomSheet(),);
+            backgroundColor: provider.appTheme == ThemeMode.light
+                ? MyTheme.whiteColor
+                : MyTheme.backgroundDark,
+            context: context,
+            builder: (context) => const AddTaskBottomSheet(),
+          );
         },
         child: Icon(
           Icons.add,
