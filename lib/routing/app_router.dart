@@ -8,7 +8,7 @@ class AppRouter {
     switch (settings.name) {
       case Routes.home:
         return MaterialPageRoute(
-            builder: (context) => HomeScreen(), settings: settings);
+            builder: (context) => const HomeScreen(), settings: settings);
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(),

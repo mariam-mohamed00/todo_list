@@ -44,19 +44,18 @@ class LanguageBottomSheet extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(text,
-              style:
-                  // provider.appTheme == ThemeMode.dark
-                  //     ?
-                  Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: MyTheme.primaryLight)
-              // : Theme.of(context)
-              //.textTheme
-              // .titleMedium!
-              // .copyWith(color: MyTheme.primaryLight),
-              ),
+          Text(
+            text,
+            style: provider.appTheme == ThemeMode.dark
+                ? Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: MyTheme.primaryLight)
+                : Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: MyTheme.primaryLight),
+          ),
           Icon(
             Icons.check,
             color: MyTheme.primaryLight,

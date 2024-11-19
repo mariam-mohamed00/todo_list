@@ -30,7 +30,7 @@ class _SettingTabScreenState extends State<SettingTabScreen> {
           InkWell(
             onTap: () {
               showModalBottomSheet(
-                backgroundColor: provider.appTheme == ThemeMode.light
+                backgroundColor: (provider.appTheme == ThemeMode.light)
                     ? MyTheme.whiteColor
                     : MyTheme.blackDark,
                 context: context,
@@ -71,7 +71,7 @@ class _SettingTabScreenState extends State<SettingTabScreen> {
           InkWell(
             onTap: () {
               showModalBottomSheet(
-               backgroundColor:  provider.appTheme == ThemeMode.light
+                backgroundColor: (provider.appTheme == ThemeMode.light)
                     ? MyTheme.whiteColor
                     : MyTheme.blackDark,
                 context: context,

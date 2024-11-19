@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Widget> tabs = [TaskListTabScreen(), SettingTabScreen()];
+  List<Widget> tabs = [const TaskListTabScreen(), const SettingTabScreen()];
 
   int index = 0;
 
@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           showModalBottomSheet(
              backgroundColor: provider.appTheme == ThemeMode.light ? MyTheme.whiteColor : MyTheme.backgroundDark,
-            context: context, builder: (context) => AddTaskBottomSheet(),);
+            context: context, builder: (context) => const AddTaskBottomSheet(),);
         },
         child: Icon(
           Icons.add,

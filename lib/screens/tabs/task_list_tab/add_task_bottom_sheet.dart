@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../providers/app_config_provider.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
-  AddTaskBottomSheet({super.key});
+  const AddTaskBottomSheet({super.key});
 
   @override
   State<AddTaskBottomSheet> createState() => _AddTaskBottomSheetState();

@@ -12,8 +12,8 @@ class TaskListTabScreen extends StatelessWidget {
       children: [
         CalendarTimeline(
           initialDate: DateTime.now(),
-          firstDate: DateTime.now().subtract(Duration(days: 365)),
-          lastDate: DateTime.now().add(Duration(days: 365)),
+          firstDate: DateTime.now().subtract(const Duration(days: 365)),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
           onDateSelected: (date) => print(date),
           leftMargin: 20,
           monthColor: MyTheme.blackColor,
@@ -26,7 +26,7 @@ class TaskListTabScreen extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemBuilder: (context, index) {
-              return TaskWidgetItem();
+              return const TaskWidgetItem();
             },
           ),
         )

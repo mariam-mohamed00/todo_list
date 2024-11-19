@@ -11,46 +11,47 @@ class ThemeBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-            onTap: () {
-              provider.changeTheme(ThemeMode.light);
-            },
-            child: provider.appTheme == ThemeMode.light
-                ? getSelectedItemWidget(
-                    context, AppLocalizations.of(context)!.light)
-                : getUnSelectedItemWidget(
-                    context, AppLocalizations.of(context)!.light)),
-        InkWell(
-            onTap: () {
-              provider.changeTheme(ThemeMode.dark);
-            },
-            child: provider.appTheme == ThemeMode.dark
-                ? getSelectedItemWidget(
-                    context, AppLocalizations.of(context)!.dark)
-                : getUnSelectedItemWidget(
-                    context, AppLocalizations.of(context)!.dark)),
-      ],
+    return Container(
+      color: provider.appTheme == ThemeMode.light
+          ? MyTheme.whiteColor
+          : MyTheme.backgroundDark,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+              onTap: () {
+                provider.changeTheme(ThemeMode.light);
+              },
+              child: provider.appTheme == ThemeMode.light
+                  ? getSelectedItemWidget(
+                      context, AppLocalizations.of(context)!.light)
+                  : getUnSelectedItemWidget(
+                      context, AppLocalizations.of(context)!.light)),
+          InkWell(
+              onTap: () {
+                provider.changeTheme(ThemeMode.dark);
+              },
+              child: provider.appTheme == ThemeMode.dark
+                  ? getSelectedItemWidget(
+                      context, AppLocalizations.of(context)!.dark)
+                  : getUnSelectedItemWidget(
+                      context, AppLocalizations.of(context)!.dark)),
+        ],
+      ),
     );
   }
 
   Widget getSelectedItemWidget(BuildContext context, String text) {
-    var provider = Provider.of<AppConfigProvider>(context);
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(text,
-              style:
-                  Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(color: MyTheme.primaryLight)
-              ),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(color: MyTheme.primaryLight)),
           Icon(
             Icons.check,
             color: MyTheme.primaryLight,
