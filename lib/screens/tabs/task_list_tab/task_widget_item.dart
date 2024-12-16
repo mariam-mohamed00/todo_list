@@ -1,3 +1,4 @@
+import 'package:app_todo_list/model/task.dart';
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/providers/app_config_provider.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class TaskWidgetItem extends StatelessWidget {
-  const TaskWidgetItem({super.key});
+   TaskWidgetItem({super.key, required this.task});
+
+  Task task;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,7 @@ class TaskWidgetItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      AppLocalizations.of(context)!.task_title,
+                      task.title ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall!
@@ -61,7 +64,7 @@ class TaskWidgetItem extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(AppLocalizations.of(context)!.task_desc,
+                    child: Text(task.description ?? '',
                         style: Theme.of(context).textTheme.titleSmall),
                   ),
                 ],

@@ -1,8 +1,11 @@
+import 'package:app_todo_list/firebase_utils.dart';
+import 'package:app_todo_list/model/task.dart';
 import 'package:app_todo_list/my_theme.dart';
+import 'package:app_todo_list/providers/list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../../providers/app_config_provider.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -16,10 +19,14 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   DateTime selectedDateTime = DateTime.now();
 
   var formKey = GlobalKey<FormState>();
+  String title = '';
+  String description = '';
+  late ListProvider listProvider;
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
+    listProvider = Provider.of<ListProvider>(context);
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -39,6 +46,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        onChanged: (value) {
+                          title = value;
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return AppLocalizations.of(context)!.title_error;
@@ -46,7 +56,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           return null;
                         },
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.enter_task_title,
+                            hintText:
+                                AppLocalizations.of(context)!.enter_task_title,
                             hintStyle: TextStyle(
                                 color: provider.appTheme == ThemeMode.light
                                     ? MyTheme.greyColor
@@ -56,6 +67,9 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
+                        onChanged: (value) {
+                          description = value;
+                        },
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return AppLocalizations.of(context)!.desc_error;
@@ -64,7 +78,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         },
                         maxLines: 4,
                         decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.enter_task_desc,
+                            hintText:
+                                AppLocalizations.of(context)!.enter_task_desc,
                             hintStyle: TextStyle(
                                 color: provider.appTheme == ThemeMode.light
                                     ? MyTheme.greyColor
@@ -81,7 +96,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                         var chosenDate = await showDatePicker(
                             context: context,
                             firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(const Duration(days: 365)));
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 365)));
                         if (chosenDate != null) {
                           selectedDateTime = chosenDate;
                         }
@@ -97,9 +113,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     ),
                     ElevatedButton(
                       onPressed: () {
-                        if (formKey.currentState!.validate() == true) {
-                          Navigator.of(context).pop();
-                        }
+                        addTask();
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: MyTheme.primaryLight,
@@ -113,5 +127,29 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         ],
       ),
     );
+  }
+
+  void addTask() {
+
+    if (formKey.currentState!.validate() == true) {
+      // add task to firebase
+      Task task = Task(
+          title: title, description: description, dateTime: selectedDateTime);
+      FirebaseUtils.addTaskToFireStore(task).timeout(
+        const Duration(microseconds: 500),
+        onTimeout: () {
+          Fluttertoast.showToast(
+              msg: "Task added succeessfully",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          listProvider.getAllTasksFromFireStore();
+          Navigator.pop(context);
+        },
+      );
+    }
   }
 }
