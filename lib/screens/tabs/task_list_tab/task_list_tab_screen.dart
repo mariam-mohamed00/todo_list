@@ -13,10 +13,9 @@ class TaskListTabScreen extends StatefulWidget {
 }
 
 class _TaskListTabScreenState extends State<TaskListTabScreen> {
-
   @override
   Widget build(BuildContext context) {
-      var listProvider = Provider.of<ListProvider>(context);
+    var listProvider = Provider.of<ListProvider>(context);
 
     if (listProvider.tasksList.isEmpty) {
       listProvider.getAllTasksFromFireStore();
@@ -24,10 +23,12 @@ class _TaskListTabScreenState extends State<TaskListTabScreen> {
     return Column(
       children: [
         CalendarTimeline(
-          initialDate: DateTime.now(),
+          initialDate: listProvider.selectDate,
           firstDate: DateTime.now().subtract(const Duration(days: 365)),
           lastDate: DateTime.now().add(const Duration(days: 365)),
-          onDateSelected: (date) => print(date),
+          onDateSelected: (date) {
+            listProvider.changeSelectedDate(date);
+          },
           leftMargin: 20,
           monthColor: MyTheme.blackColor,
           dayColor: MyTheme.blackColor,
