@@ -1,3 +1,5 @@
+import 'package:app_todo_list/auth/login/login_screen.dart';
+import 'package:app_todo_list/auth/register/register_screen.dart';
 import 'package:app_todo_list/routing/routes.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,13 @@ class AppRouter {
       case Routes.home:
         return MaterialPageRoute(
             builder: (context) => const HomeScreen(), settings: settings);
+      case Routes.loginScreen:
+        return MaterialPageRoute(
+            builder: (context) =>  LoginScreen (), settings: settings);
+      case Routes.registerScreen:
+        return MaterialPageRoute(
+            builder: (context) => const RegisterScreen(), settings: settings);
+      
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(),
