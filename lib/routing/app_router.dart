@@ -13,7 +13,7 @@ class AppRouter {
             builder: (context) => const HomeScreen(), settings: settings);
       case Routes.loginScreen:
         return MaterialPageRoute(
-            builder: (context) =>  LoginScreen (), settings: settings);
+            builder: (context) => const LoginScreen (), settings: settings);
       case Routes.registerScreen:
         return MaterialPageRoute(
             builder: (context) => const RegisterScreen(), settings: settings);

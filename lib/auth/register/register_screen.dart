@@ -1,8 +1,12 @@
-import 'package:app_todo_list/auth/widgets/custom_text_form_field%20copy.dart';
+// ignore_for_file: avoid_print
+
+import 'package:app_todo_list/auth/widgets/custom_text_form_field.dart';
 import 'package:app_todo_list/auth/widgets/default_elevation_button.dart';
 import 'package:app_todo_list/auth/widgets/password_text_field.dart';
+import 'package:app_todo_list/dialog_utils.dart';
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/routing/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,23 +17,15 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  var nameController = TextEditingController();
-
-  var emailController = TextEditingController();
-
-  var passwordController = TextEditingController();
-
-  var confirmationPasswordController = TextEditingController();
-
   var formKey = GlobalKey<FormState>();
 
   RegExp emailValid = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
-  String errEmailMsg = '';
-  String errNameMsg = '';
-  String errPassMsg = '';
-  String errConfirmPassMsg = '';
+  String name = '';
+  String email = '';
+  String password = '';
+  String confirmPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -51,112 +47,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: MediaQuery.of(context).size.height * 0.35,
                     ),
                     CustomTextFormField(
-                      onTap: () => setState(() {
-                        if (nameController.text.length < 3) {
-                          errNameMsg = 'Invaled name';
-                        } else {
-                          errNameMsg = '';
-                        }
-                        errEmailMsg = '';
-                        errPassMsg = '';
-                        errConfirmPassMsg = '';
-                      }),
-                      errMsg: errNameMsg,
-                      label: 'User Name',
-                      controller: nameController,
-                      onChanged: (text) {
-                        setState(() {
-                          if (nameController.text.length < 3) {
-                            errNameMsg = 'Invalid name';
-                          } else {
-                            errNameMsg = '';
+                        label: 'User Name',
+                        onChanged: (text) {
+                          setState(() {
+                            if (text != null) name = text;
+                          });
+                          return null;
+                        },
+                        validator: (text) {
+                          if (text!.isEmpty || text.length < 3) {
+                            return 'invalid name';
                           }
-                        });
-                        return null;
-                      },
-                    ),
+                          return null;
+                        }),
                     CustomTextFormField(
-                      onTap: () => setState(() {
-                        if (!emailValid.hasMatch(emailController.text)) {
-                          errEmailMsg = 'Invaled email';
-                        } else {
-                          errEmailMsg = '';
-                        }
-                        errNameMsg = '';
-                        errPassMsg = '';
-                        errConfirmPassMsg = '';
-                      }),
-                      errMsg: errEmailMsg,
                       onChanged: (text) {
                         setState(() {
-                          if (!emailValid.hasMatch(text.toString())) {
-                            errEmailMsg = 'Invalid email';
-                          } else {
-                            errEmailMsg = '';
-                          }
+                          if (text != null) email = text;
                         });
                         return null;
                       },
                       label: 'Email Address',
                       textInputType: TextInputType.emailAddress,
-                      controller: emailController,
+                      validator: (text) {
+                        if (!emailValid.hasMatch(text!)) {
+                          return 'invalid email';
+                        }
+                        return null;
+                      },
                     ),
                     PasswordTextFormField(
                       label: 'Password',
-                      errMsg: errPassMsg,
-                      controller: passwordController,
-                      onTap: () => setState(() {
-                        if (passwordController.text.length < 6) {
-                          errPassMsg = 'Invalid password';
-                        } else {
-                          errPassMsg = '';
-                        }
-                        errNameMsg = '';
-                        errEmailMsg = '';
-                        errConfirmPassMsg = '';
-                      }),
                       onChanged: (text) {
                         setState(() {
-                          if (text.toString().length < 6) {
-                            errPassMsg = 'Invalid password';
-                          } else {
-                            errPassMsg = '';
-                          }
+                          if (text != null) password = text;
                         });
+                        return null;
+                      },
+                      validator: (text) {
+                        if (text!.length < 8) {
+                          return 'invalid password';
+                        }
                         return null;
                       },
                     ),
                     PasswordTextFormField(
                       label: 'Confirmation Password',
-                      errMsg: errConfirmPassMsg,
-                      controller: confirmationPasswordController,
-                      onTap: () => setState(() {
-                        if (confirmationPasswordController.text !=
-                            passwordController.text) {
-                          errConfirmPassMsg = "Password doesn't match";
-                        } else {
-                          errConfirmPassMsg = '';
-                        }
-                        errNameMsg = '';
-                        errEmailMsg = '';
-                        errPassMsg = '';
-                      }),
                       onChanged: (text) {
                         setState(() {
-                          if (text != passwordController.text) {
-                            errConfirmPassMsg = "Password doesn't match";
-                          } else {
-                            errConfirmPassMsg = '';
-                          }
+                          if (text != null) confirmPassword = text;
                         });
                         return null;
                       },
+                      validator: (text) {
+                        if (text != password) {
+                          return "password doesn't match";
+                        }
+                        return null;
+                      },
                     ),
-                    (nameController.text.length >= 3 &&
-                            emailValid.hasMatch(emailController.text) &&
-                            passwordController.text.length >= 6 &&
-                            confirmationPasswordController.text ==
-                                passwordController.text)
+                    (name.length >= 3 &&
+                            emailValid.hasMatch(email) &&
+                            password.length >= 8 &&
+                            password == confirmPassword)
                         ? DefaultElevatedButton(
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
@@ -164,9 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             labelColor: MyTheme.whiteColor,
                             onPressed: () {
                               setState(() {});
-                              Navigator.of(context).pushReplacementNamed(
-                                Routes.home,
-                              );
+                              register();
                             },
                           )
                         : DefaultElevatedButton(
@@ -196,13 +147,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void register() {
-    // if (formKey.currentState?.validate() == true) {
-    if (nameController.text.length >= 3 &&
-        emailValid.hasMatch(emailController.text) &&
-        passwordController.text.length >= 6 &&
-        confirmationPasswordController.text == passwordController.text) {
-      Navigator.of(context).pushReplacementNamed(Routes.home);
+  void register() async {
+    DialogUtils.showLoading(context, 'Loading...');
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      DialogUtils.hideLoading(context);
+      DialogUtils.showMessage(context, 'Register successfully', posAction: () {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+      }, posActionName: 'Ok', titleMessage: 'Success');
+      print('register success');
+      print(credential.user?.uid ?? '');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context,
+          'weak password',
+          negActionName: 'ok',
+          titleMessage: 'Try again',
+        );
+
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context,
+          'email already in use',
+          negActionName: 'Ok',
+          titleMessage: 'Try again',
+        );
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }

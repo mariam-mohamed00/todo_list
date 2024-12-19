@@ -130,7 +130,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void addTask() {
-
     if (formKey.currentState!.validate() == true) {
       // add task to firebase
       Task task = Task(
@@ -147,6 +146,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
               textColor: Colors.white,
               fontSize: 16.0);
           listProvider.getAllTasksFromFireStore();
+          // ignore: use_build_context_synchronously
           Navigator.pop(context);
         },
       );

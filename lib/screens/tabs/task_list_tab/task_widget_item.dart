@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: must_be_immutable
 class TaskWidgetItem extends StatelessWidget {
    TaskWidgetItem({super.key, required this.task});
 

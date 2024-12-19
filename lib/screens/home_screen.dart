@@ -1,5 +1,6 @@
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/providers/app_config_provider.dart';
+import 'package:app_todo_list/routing/routes.dart';
 import 'package:app_todo_list/screens/tabs/task_list_tab/add_task_bottom_sheet.dart';
 import 'package:app_todo_list/screens/tabs/task_list_tab/task_list_tab_screen.dart';
 import 'package:app_todo_list/screens/tabs/setting_tab/setting_tab_screen.dart';
@@ -24,7 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
     var provider = Provider.of<AppConfigProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(Routes.loginScreen);
+          },
+          icon: const Icon(Icons.arrow_back),
+          color: Colors.white,
+        ),
         title: Text(
           AppLocalizations.of(context)!.to_do_list,
           style: Theme.of(context).textTheme.titleLarge,

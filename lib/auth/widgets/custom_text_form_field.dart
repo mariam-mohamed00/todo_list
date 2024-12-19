@@ -1,62 +1,56 @@
 import 'package:app_todo_list/my_theme.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomTextFormField extends StatefulWidget {
   CustomTextFormField({
-    required this.controller,
+    super.key,
     required this.label,
     this.textInputType = TextInputType.text,
-    required this.errMsg,
     this.onChanged,
-    this.onTap,
-
-    // this.validator,
+    this.validator,
   });
 
-  TextEditingController controller;
   String label;
   TextInputType textInputType;
-  String errMsg;
   String? Function(String?)? onChanged;
-  void Function()? onTap;
-
-  // String? Function(String?)? validator;
+  String? Function(String?)? validator;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  late String? _errorMessage = widget.errMsg;
+  // late FocusNode focusNode;
 
-  @override
-  void didUpdateWidget(covariant CustomTextFormField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _errorMessage = widget.errMsg;
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  //   focusNode = FocusNode();
+  //   focusNode.addListener(() {
+  //     setState(() {
+  //       focusNode.hasFocus;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 12),
       child: TextFormField(
-        controller: widget.controller,
-
-        // validator: widget.validator,
+        // focusNode: focusNode,
+        // validator: (value) {
+        //   if (!focusNode.hasFocus) return null;
+        //   return widget.validator?.call(value);
+        // },
+        validator: widget.validator,
         onChanged: widget.onChanged,
-        onTap: () {
-          _errorMessage = widget.errMsg;
-          widget.onTap?.call();
-        },
-        onTapOutside: (_) {
-          setState(() {
-            FocusScope.of(context).unfocus();
-            _errorMessage = null;
-          });
-        },
+        onTapOutside: (_) => FocusScope.of(context).unfocus(),
         keyboardType: widget.textInputType,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          errorText: _errorMessage,
           labelStyle:
               Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16),
           label: Text(widget.label),

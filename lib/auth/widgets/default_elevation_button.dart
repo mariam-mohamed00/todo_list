@@ -1,9 +1,8 @@
-import 'package:app_todo_list/my_theme.dart';
 import 'package:flutter/material.dart';
 
 class DefaultElevatedButton extends StatelessWidget {
   const DefaultElevatedButton(
-      {required this.label,
+      {super.key, required this.label,
       required this.onPressed,
       this.height,
       this.width,

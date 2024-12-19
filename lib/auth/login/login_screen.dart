@@ -1,28 +1,30 @@
-import 'package:app_todo_list/auth/widgets/custom_text_form_field%20copy.dart';
+// ignore_for_file: avoid_print
+
+import 'package:app_todo_list/auth/widgets/custom_text_form_field.dart';
 import 'package:app_todo_list/auth/widgets/default_elevation_button.dart';
 import 'package:app_todo_list/auth/widgets/password_text_field.dart';
+import 'package:app_todo_list/dialog_utils.dart';
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/routing/routes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var emailController = TextEditingController();
-
-  var passwordController = TextEditingController();
-
   var formKey = GlobalKey<FormState>();
 
-  String errEmailMsg = '';
-  String errPasswordMsg = '';
+  String email = '';
+  String password = '';
+
   RegExp emailValid = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,56 +45,37 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: MediaQuery.of(context).size.height * 0.35,
                     ),
                     CustomTextFormField(
-                      controller: emailController,
                       label: 'Email',
-                      errMsg: errEmailMsg,
                       textInputType: TextInputType.emailAddress,
-                      onTap: () {
-                        setState(() {
-                          if (!emailValid.hasMatch(emailController.text)) {
-                            errEmailMsg = 'Invalid email';
-                          } else {
-                            errEmailMsg = '';
-                          }
-                          errPasswordMsg = '';
-                        });
+                      validator: (text) {
+                        if (!emailValid.hasMatch(text!)) {
+                          return 'Invalid email';
+                        }
+                        return null;
                       },
                       onChanged: (text) {
                         setState(() {
-                          if (!emailValid.hasMatch(text.toString())) {
-                            errEmailMsg = 'Invalid email';
-                          } else {
-                            errEmailMsg = '';
-                          }
+                          if (text != null) email = text;
                         });
                         return null;
                       },
                     ),
                     PasswordTextFormField(
                       label: 'Password',
-                      errMsg: errPasswordMsg,
-                      controller: passwordController,
-                      onTap: () => setState(() {
-                        if (passwordController.text.length < 6) {
-                          errPasswordMsg = 'Invalid password';
-                        } else {
-                          errPasswordMsg = '';
+                      validator: (text) {
+                        if (text!.length < 8) {
+                          return 'Invalid password';
                         }
-                        errEmailMsg = '';
-                      }),
+                        return null;
+                      },
                       onChanged: (text) {
                         setState(() {
-                          if (text.toString().length < 6) {
-                            errPasswordMsg = 'Invalid password';
-                          } else {
-                            errPasswordMsg = '';
-                          }
+                          if (text != null) password = text;
                         });
                         return null;
                       },
                     ),
-                    (emailValid.hasMatch(emailController.text) &&
-                            passwordController.text.length >= 6)
+                    (emailValid.hasMatch(email) && password.length >= 8)
                         ? DefaultElevatedButton(
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
@@ -100,9 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             labelColor: MyTheme.whiteColor,
                             onPressed: () {
                               setState(() {});
-                              Navigator.of(context).pushReplacementNamed(
-                                Routes.home,
-                              );
+                              login();
                             },
                           )
                         : DefaultElevatedButton(
@@ -136,5 +117,48 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  void login() async {
+    DialogUtils.showLoading(context, 'Loading...');
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      DialogUtils.hideLoading(context);
+      DialogUtils.showMessage(context, 'Login successfully', posAction: () {
+        Navigator.of(context).pushReplacementNamed(Routes.home);
+      }, posActionName: 'Ok', titleMessage: 'Success');
+      print('login success');
+      print(credential.user?.uid ?? '');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context,
+          'user not found',
+          negActionName: 'ok',
+          titleMessage: 'Try again',
+        );
+        print(e);
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context,
+          'wrong password',
+          negActionName: 'ok',
+          titleMessage: 'Try again',
+        );
+        print('Wrong password provided for that user.');
+      } else {
+        DialogUtils.hideLoading(context);
+        DialogUtils.showMessage(
+          context,
+          'user not found or wrong password',
+          negActionName: 'ok',
+          titleMessage: 'Try again',
+        );
+      }
+    }
   }
 }
