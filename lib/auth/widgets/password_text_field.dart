@@ -1,5 +1,7 @@
 import 'package:app_todo_list/my_theme.dart';
+import 'package:app_todo_list/providers/app_config_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PasswordTextFormField extends StatefulWidget {
   const PasswordTextFormField({
@@ -22,6 +24,8 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 12),
       child: TextFormField(
@@ -32,6 +36,12 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
         autocorrect: false,
         enableSuggestions: false,
         onTapOutside: (_) => FocusScope.of(context).unfocus(),
+        style: provider.appTheme == ThemeMode.light
+            ? Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16)
+            : Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(fontSize: 16, color: MyTheme.whiteColor),
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
@@ -50,11 +60,17 @@ class _PasswordTextFormFieldState extends State<PasswordTextFormField> {
             borderSide: BorderSide(color: MyTheme.primaryLight, width: 3),
           ),
           label: Text(widget.label),
-          labelStyle:
-              Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16),
+          labelStyle: provider.appTheme == ThemeMode.light
+              ? Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16)
+              : Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(fontSize: 16, color: MyTheme.whiteColor),
           suffixIcon: IconButton(
             icon: Icon(
-              color: MyTheme.blackColor,
+              color: provider.appTheme == ThemeMode.light
+                  ? MyTheme.blackColor
+                  : MyTheme.whiteColor,
               _isObscure
                   ? Icons.visibility_outlined
                   : Icons.visibility_off_outlined,

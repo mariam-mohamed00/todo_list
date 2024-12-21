@@ -3,11 +3,16 @@
 import 'package:app_todo_list/auth/widgets/custom_text_form_field.dart';
 import 'package:app_todo_list/auth/widgets/default_elevation_button.dart';
 import 'package:app_todo_list/auth/widgets/password_text_field.dart';
-import 'package:app_todo_list/dialog_utils.dart';
+import 'package:app_todo_list/model/my_user.dart';
 import 'package:app_todo_list/my_theme.dart';
+import 'package:app_todo_list/providers/app_config_provider.dart';
+import 'package:app_todo_list/providers/auth_provider.dart';
 import 'package:app_todo_list/routing/routes.dart';
+import 'package:app_todo_list/utils/dialog_utils.dart';
+import 'package:app_todo_list/utils/firebase_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -27,8 +32,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String password = '';
   String confirmPassword = '';
 
+  late AppConfigProvider provider;
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<AppConfigProvider>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -114,7 +122,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
                             label: 'Register',
-                            labelColor: MyTheme.whiteColor,
+                            labelColor: provider.appTheme == ThemeMode.light
+                                ? MyTheme.whiteColor
+                                : MyTheme.backgroundDark,
                             onPressed: () {
                               setState(() {});
                               register();
@@ -148,15 +158,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void register() async {
-    DialogUtils.showLoading(context, 'Loading...');
+    var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
+    DialogUtils.showLoading(
+        context,
+        'Loading...',
+        provider.appTheme == ThemeMode.light
+            ? MyTheme.whiteColor
+            : MyTheme.backgroundDark);
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: password);
+
+      MyUser myUser =
+          MyUser(id: credential.user?.uid ?? '', name: name, email: email);
+      print(name);
+      print('---------------------------');
+      await FirebaseUtils.addUserToFireStore(myUser);
+      authProvider.updateUser(myUser);
+
       DialogUtils.hideLoading(context);
-      DialogUtils.showMessage(context, 'Register successfully', posAction: () {
+      DialogUtils.showMessage(
+          textColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.blackColor
+              : MyTheme.whiteColor,
+          actionColor: MyTheme.primaryLight,
+          backgroundColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark,
+          context,
+          'Register successfully', posAction: () {
         Navigator.of(context).pushReplacementNamed(Routes.home);
       }, posActionName: 'Ok', titleMessage: 'Success');
       print('register success');
@@ -165,6 +195,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (e.code == 'weak-password') {
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
+          textColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.blackColor
+              : MyTheme.whiteColor,
+          actionColor: MyTheme.primaryLight,
+          backgroundColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark,
           context,
           'weak password',
           negActionName: 'ok',
@@ -175,6 +212,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       } else if (e.code == 'email-already-in-use') {
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
+          textColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.blackColor
+              : MyTheme.whiteColor,
+          actionColor: MyTheme.primaryLight,
+          backgroundColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark,
           context,
           'email already in use',
           negActionName: 'Ok',

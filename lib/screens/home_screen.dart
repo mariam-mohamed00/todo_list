@@ -1,12 +1,13 @@
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/providers/app_config_provider.dart';
+import 'package:app_todo_list/providers/auth_provider.dart';
+import 'package:app_todo_list/providers/list_provider.dart';
 import 'package:app_todo_list/routing/routes.dart';
 import 'package:app_todo_list/screens/tabs/task_list_tab/add_task_bottom_sheet.dart';
 import 'package:app_todo_list/screens/tabs/task_list_tab/task_list_tab_screen.dart';
 import 'package:app_todo_list/screens/tabs/setting_tab/setting_tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,17 +24,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
+    var authProvider = Provider.of<UserAuthProvider>(context);
+    var listProvider = Provider.of<ListProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(Routes.loginScreen);
-          },
-          icon: const Icon(Icons.arrow_back),
-          color: Colors.white,
-        ),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+              onPressed: () {
+                // listProvider.tasksList = [];
+                // authProvider.currentuser = null;
+                Navigator.of(context).pushReplacementNamed(Routes.loginScreen);
+              },
+              icon: Icon(
+                Icons.logout,
+                color: MyTheme.whiteColor,
+              ))
+        ],
         title: Text(
-          AppLocalizations.of(context)!.to_do_list,
+          (index == 0
+              ? 'Todo List ' '${authProvider.currentuser!.name}'
+              : 'Settings ' '${authProvider.currentuser!.name}'),
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),

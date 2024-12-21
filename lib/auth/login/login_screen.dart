@@ -1,13 +1,18 @@
 // ignore_for_file: avoid_print
 
+import 'package:app_todo_list/providers/app_config_provider.dart';
+import 'package:app_todo_list/providers/auth_provider.dart';
+import 'package:app_todo_list/utils/firebase_utils.dart';
+import 'package:flutter/material.dart';
 import 'package:app_todo_list/auth/widgets/custom_text_form_field.dart';
 import 'package:app_todo_list/auth/widgets/default_elevation_button.dart';
 import 'package:app_todo_list/auth/widgets/password_text_field.dart';
-import 'package:app_todo_list/dialog_utils.dart';
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:app_todo_list/utils/dialog_utils.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,8 +30,12 @@ class _LoginScreenState extends State<LoginScreen> {
   RegExp emailValid = RegExp(
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
+  late AppConfigProvider provider;
+
   @override
   Widget build(BuildContext context) {
+    provider = Provider.of<AppConfigProvider>(context);
+
     return Scaffold(
       body: Stack(
         children: [
@@ -80,7 +89,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
                             label: 'Login',
-                            labelColor: MyTheme.whiteColor,
+                            labelColor: provider.appTheme == ThemeMode.light
+                                ? MyTheme.whiteColor
+                                : MyTheme.backgroundDark,
                             onPressed: () {
                               setState(() {});
                               login();
@@ -96,7 +107,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.5),
-                        const Text("Don't have an account?"),
+                        Text(
+                          "Don't have an account?",
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(fontSize: 14),
+                        ),
                         TextButton(
                             onPressed: () {
                               Navigator.of(context)
@@ -120,30 +137,77 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void login() async {
-    DialogUtils.showLoading(context, 'Loading...');
+    DialogUtils.showLoading(
+        context,
+        'Loading...',
+        provider.appTheme == ThemeMode.light
+            ? MyTheme.whiteColor
+            : MyTheme.backgroundDark);
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+
+      print('Before read user from Firestore');
+      print('----------------------------------------------------');
+
+      var user =
+          await FirebaseUtils.readUserFromFireStore(credential.user?.uid ?? "");
+      if (user == null) {
+        return;
+      }
+
+      var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
+      authProvider.updateUser(user);
+
       DialogUtils.hideLoading(context);
-      DialogUtils.showMessage(context, 'Login successfully', posAction: () {
-        Navigator.of(context).pushReplacementNamed(Routes.home);
-      }, posActionName: 'Ok', titleMessage: 'Success');
+
+      DialogUtils.showMessage(
+        context,
+        'Login successfully',
+        posAction: () {
+          Navigator.of(context).pushReplacementNamed(Routes.home);
+        },
+        posActionName: 'Ok',
+        titleMessage: 'Success',
+        textColor: provider.appTheme == ThemeMode.light
+            ? MyTheme.blackColor
+            : MyTheme.whiteColor,
+        actionColor: MyTheme.primaryLight,
+        backgroundColor: provider.appTheme == ThemeMode.light
+            ? MyTheme.whiteColor
+            : MyTheme.backgroundDark,
+      );
       print('login success');
       print(credential.user?.uid ?? '');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
+          textColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.blackColor
+              : MyTheme.whiteColor,
+          actionColor: MyTheme.primaryLight,
+          backgroundColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark,
           context,
           'user not found',
           negActionName: 'ok',
           titleMessage: 'Try again',
         );
+
         print(e);
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
+          textColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.blackColor
+              : MyTheme.whiteColor,
+          actionColor: MyTheme.primaryLight,
+          backgroundColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark,
           context,
           'wrong password',
           negActionName: 'ok',
@@ -153,6 +217,13 @@ class _LoginScreenState extends State<LoginScreen> {
       } else {
         DialogUtils.hideLoading(context);
         DialogUtils.showMessage(
+          textColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.blackColor
+              : MyTheme.whiteColor,
+          actionColor: MyTheme.primaryLight,
+          backgroundColor: provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark,
           context,
           'user not found or wrong password',
           negActionName: 'ok',

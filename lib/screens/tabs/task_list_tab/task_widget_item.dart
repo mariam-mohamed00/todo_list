@@ -1,19 +1,27 @@
+// ignore_for_file: avoid_print
+
 import 'package:app_todo_list/model/task.dart';
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/providers/app_config_provider.dart';
+import 'package:app_todo_list/providers/auth_provider.dart';
+import 'package:app_todo_list/providers/list_provider.dart';
+import 'package:app_todo_list/utils/firebase_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 // ignore: must_be_immutable
 class TaskWidgetItem extends StatelessWidget {
-   TaskWidgetItem({super.key, required this.task});
+  TaskWidgetItem({super.key, required this.task});
 
   Task task;
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
+    var userAuthProvider = Provider.of<UserAuthProvider>(context);
+    var listProvider = Provider.of<ListProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Slidable(
@@ -22,7 +30,19 @@ class TaskWidgetItem extends StatelessWidget {
           motion: const DrawerMotion(),
           children: [
             SlidableAction(
-              onPressed: (context) {},
+              onPressed: (context) {
+                FirebaseUtils.deleteTaskFromFireStore(
+                        task, userAuthProvider.currentuser?.id ?? '')
+                    .timeout(
+                  const Duration(microseconds: 500),
+                  onTimeout: () {
+                    print('task was deleted');
+                    print('---------------------------------------');
+                    listProvider.getAllTasksFromFireStore(
+                        userAuthProvider.currentuser?.id ?? '');
+                  },
+                );
+              },
               backgroundColor: MyTheme.redColor,
               foregroundColor: MyTheme.whiteColor,
               icon: Icons.delete,

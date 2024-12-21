@@ -1,8 +1,12 @@
+import 'package:app_todo_list/my_theme.dart';
+import 'package:app_todo_list/providers/app_config_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DefaultElevatedButton extends StatelessWidget {
   const DefaultElevatedButton(
-      {super.key, required this.label,
+      {super.key,
+      required this.label,
       required this.onPressed,
       this.height,
       this.width,
@@ -19,12 +23,18 @@ class DefaultElevatedButton extends StatelessWidget {
   final Color? labelColor;
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
+
     final screenSize = MediaQuery.sizeOf(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 12),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
+          side: BorderSide(
+              color: provider.appTheme == ThemeMode.light
+                  ? Colors.transparent
+                  : MyTheme.primaryLight),
           fixedSize: Size(
             width ?? screenSize.width,
             height ?? screenSize.height * 0.06,

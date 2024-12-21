@@ -1,5 +1,7 @@
 import 'package:app_todo_list/my_theme.dart';
+import 'package:app_todo_list/providers/app_config_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class CustomTextFormField extends StatefulWidget {
@@ -37,6 +39,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<AppConfigProvider>(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 26.0, vertical: 12),
       child: TextFormField(
@@ -50,9 +54,19 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         onTapOutside: (_) => FocusScope.of(context).unfocus(),
         keyboardType: widget.textInputType,
         autovalidateMode: AutovalidateMode.onUserInteraction,
+        style: provider.appTheme == ThemeMode.light
+            ? Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16)
+            : Theme.of(context)
+                .textTheme
+                .labelMedium!
+                .copyWith(fontSize: 16, color: MyTheme.whiteColor),
         decoration: InputDecoration(
-          labelStyle:
-              Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16),
+          labelStyle: provider.appTheme == ThemeMode.light
+              ? Theme.of(context).textTheme.labelMedium!.copyWith(fontSize: 16)
+              : Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(fontSize: 16, color: MyTheme.whiteColor),
           label: Text(widget.label),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
