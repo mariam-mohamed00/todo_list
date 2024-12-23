@@ -160,27 +160,13 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             titleMessage: 'Success',
             posActionName: 'ok', posAction: () {
           Navigator.of(context).pop();
-        });
-        listProvider
-            .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
-      });
-      /// offline
-      // .timeout(
-      //   const Duration(microseconds: 100),
-      //   onTimeout: () {
-      //     Fluttertoast.showToast(
-      //         msg: "Task added succeessfully",
-      //         toastLength: Toast.LENGTH_LONG,
-      //         gravity: ToastGravity.CENTER,
-      //         timeInSecForIosWeb: 1,
-      //         backgroundColor: Colors.red,
-      //         textColor: Colors.white,
-      //         fontSize: 16.0);
-      //     listProvider
-      //         .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
-      //     // Navigator.pop(context);
-      // },
-      // );
+        });}).timeout(
+        const Duration(microseconds: 100),
+        onTimeout: () {
+          listProvider
+              .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
+      },
+      );
     }
   }
 }

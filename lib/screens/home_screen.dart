@@ -1,7 +1,6 @@
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/providers/app_config_provider.dart';
 import 'package:app_todo_list/providers/auth_provider.dart';
-import 'package:app_todo_list/providers/list_provider.dart';
 import 'package:app_todo_list/routing/routes.dart';
 import 'package:app_todo_list/screens/tabs/task_list_tab/add_task_bottom_sheet.dart';
 import 'package:app_todo_list/screens/tabs/task_list_tab/task_list_tab_screen.dart';
@@ -25,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
     var authProvider = Provider.of<UserAuthProvider>(context);
-    var listProvider = Provider.of<ListProvider>(context);
 
     return Scaffold(
       appBar: AppBar(

@@ -4,5 +4,6 @@ class Routes{
   static const String collectionMyUserName = '/collectionMyUserName';
   static const String loginScreen = '/loginScreen';
   static const String registerScreen = '/registerScreen';
+  static const String editTaskScreen = '/editTaskScreen';
 
 }
