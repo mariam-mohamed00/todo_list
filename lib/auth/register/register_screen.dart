@@ -13,6 +13,7 @@ import 'package:app_todo_list/utils/firebase_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -55,7 +56,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       height: MediaQuery.of(context).size.height * 0.35,
                     ),
                     CustomTextFormField(
-                        label: 'User Name',
+                        label: AppLocalizations.of(context)!.user_name,
                         onChanged: (text) {
                           setState(() {
                             if (text != null) name = text;
@@ -64,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         },
                         validator: (text) {
                           if (text!.isEmpty || text.length < 3) {
-                            return 'invalid name';
+                            return AppLocalizations.of(context)!.invalid_name;
                           }
                           return null;
                         }),
@@ -75,17 +76,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         });
                         return null;
                       },
-                      label: 'Email Address',
+                      label: AppLocalizations.of(context)!.email,
                       textInputType: TextInputType.emailAddress,
                       validator: (text) {
                         if (!emailValid.hasMatch(text!)) {
-                          return 'invalid email';
+                          return AppLocalizations.of(context)!.invalid_email;
                         }
                         return null;
                       },
                     ),
                     PasswordTextFormField(
-                      label: 'Password',
+                      label: AppLocalizations.of(context)!.password,
                       onChanged: (text) {
                         setState(() {
                           if (text != null) password = text;
@@ -94,13 +95,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                       validator: (text) {
                         if (text!.length < 8) {
-                          return 'invalid password';
+                          return AppLocalizations.of(context)!.invalid_password;
                         }
                         return null;
                       },
                     ),
                     PasswordTextFormField(
-                      label: 'Confirmation Password',
+                      label: AppLocalizations.of(context)!.confirm_pass,
                       onChanged: (text) {
                         setState(() {
                           if (text != null) confirmPassword = text;
@@ -109,7 +110,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                       validator: (text) {
                         if (text != password) {
-                          return "password doesn't match";
+                          return AppLocalizations.of(context)!.confirm_errMsg;
                         }
                         return null;
                       },
@@ -121,10 +122,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ? DefaultElevatedButton(
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
-                            label: 'Register',
-                            labelColor: provider.appTheme == ThemeMode.light
-                                ? MyTheme.whiteColor
-                                : MyTheme.backgroundDark,
+                            label: AppLocalizations.of(context)!.register,
                             onPressed: () {
                               setState(() {});
                               register();
@@ -132,7 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           )
                         : DefaultElevatedButton(
                             isDisabled: true,
-                            label: 'Register',
+                            label: AppLocalizations.of(context)!.register,
                             onPressed: () {},
                           ),
                     TextButton(
@@ -140,7 +138,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Navigator.of(context).pushNamed(Routes.loginScreen);
                         },
                         child: Text(
-                          'Already have an account',
+                          AppLocalizations.of(context)!.already_have_an_account,
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
@@ -161,7 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
     DialogUtils.showLoading(
         context,
-        'Loading...',
+        AppLocalizations.of(context)!.loading,
         provider.appTheme == ThemeMode.light
             ? MyTheme.whiteColor
             : MyTheme.backgroundDark);
@@ -186,9 +184,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ? MyTheme.whiteColor
               : MyTheme.backgroundDark,
           context,
-          'Register successfully', posAction: () {
+          AppLocalizations.of(context)!.register_successfully, posAction: () {
         Navigator.of(context).pushReplacementNamed(Routes.home);
-      }, posActionName: 'Ok', titleMessage: 'Success');
+      },
+          posActionName: AppLocalizations.of(context)!.ok,
+          titleMessage: AppLocalizations.of(context)!.success);
       print('register success');
       print(credential.user?.uid ?? '');
     } on FirebaseAuthException catch (e) {
@@ -220,9 +220,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ? MyTheme.whiteColor
               : MyTheme.backgroundDark,
           context,
-          'email already in use',
-          negActionName: 'Ok',
-          titleMessage: 'Try again',
+          AppLocalizations.of(context)!.email_already_in_use,
+          negActionName: AppLocalizations.of(context)!.ok,
+          titleMessage: AppLocalizations.of(context)!.try_again,
         );
         print('The account already exists for that email.');
       }

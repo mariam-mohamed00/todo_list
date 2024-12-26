@@ -12,6 +12,7 @@ import 'package:app_todo_list/routing/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:app_todo_list/utils/dialog_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -53,11 +54,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: MediaQuery.of(context).size.height * 0.35,
                     ),
                     CustomTextFormField(
-                      label: 'Email',
+                      label: AppLocalizations.of(context)!.email,
                       textInputType: TextInputType.emailAddress,
                       validator: (text) {
                         if (!emailValid.hasMatch(text!)) {
-                          return 'Invalid email';
+                          return AppLocalizations.of(context)!.invalid_email;
                         }
                         return null;
                       },
@@ -69,10 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
                     PasswordTextFormField(
-                      label: 'Password',
+                      label: AppLocalizations.of(context)!.password,
                       validator: (text) {
                         if (text!.length < 8) {
-                          return 'Invalid password';
+                          return AppLocalizations.of(context)!.invalid_password;
                         }
                         return null;
                       },
@@ -87,10 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ? DefaultElevatedButton(
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
-                            label: 'Login',
-                            labelColor: provider.appTheme == ThemeMode.light
-                                ? MyTheme.whiteColor
-                                : MyTheme.backgroundDark,
+                            label: AppLocalizations.of(context)!.login,
                             onPressed: () {
                               setState(() {});
                               login();
@@ -98,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           )
                         : DefaultElevatedButton(
                             isDisabled: true,
-                            label: 'Login',
+                            label: AppLocalizations.of(context)!.login,
                             onPressed: () {},
                           ),
                     Row(
@@ -107,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         SizedBox(
                             height: MediaQuery.of(context).size.height * 0.5),
                         Text(
-                          "Don't have an account?",
+                          AppLocalizations.of(context)!.do_not_have_an_account,
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall!
@@ -119,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   .pushNamed(Routes.registerScreen);
                             },
                             child: Text(
-                              'Sign up',
+                              AppLocalizations.of(context)!.sign_up,
                               style: TextStyle(
                                   color: MyTheme.primaryLight,
                                   fontSize: 16,
@@ -138,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() async {
     DialogUtils.showLoading(
         context,
-        'Loading...',
+        AppLocalizations.of(context)!.loading,
         provider.appTheme == ThemeMode.light
             ? MyTheme.whiteColor
             : MyTheme.backgroundDark);
@@ -162,12 +160,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
       DialogUtils.showMessage(
         context,
-        'Login successfully',
+        AppLocalizations.of(context)!.login_successfully,
         posAction: () {
           Navigator.of(context).pushReplacementNamed(Routes.home);
         },
-        posActionName: 'Ok',
-        titleMessage: 'Success',
+        posActionName: AppLocalizations.of(context)!.ok,
+        titleMessage: AppLocalizations.of(context)!.success,
         textColor: provider.appTheme == ThemeMode.light
             ? MyTheme.blackColor
             : MyTheme.whiteColor,
@@ -190,9 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ? MyTheme.whiteColor
               : MyTheme.backgroundDark,
           context,
-          'user not found',
-          negActionName: 'ok',
-          titleMessage: 'Try again',
+          AppLocalizations.of(context)!.user_not_found,
+          negActionName: AppLocalizations.of(context)!.ok,
+          titleMessage: AppLocalizations.of(context)!.try_again,
         );
 
         print(e);
@@ -224,9 +222,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ? MyTheme.whiteColor
               : MyTheme.backgroundDark,
           context,
-          'user not found or wrong password',
-          negActionName: 'ok',
-          titleMessage: 'Try again',
+          AppLocalizations.of(context)!.user_not_found,
+          negActionName: AppLocalizations.of(context)!.ok,
+          titleMessage: AppLocalizations.of(context)!.try_again,
         );
       }
     }

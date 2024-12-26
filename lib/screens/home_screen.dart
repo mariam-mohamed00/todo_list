@@ -41,9 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
         ],
         title: Text(
+<<<<<<< Updated upstream
+          AppLocalizations.of(context)!.to_do_list,
+=======
           (index == 0
-              ? 'Todo List ' '${authProvider.currentuser!.name}'
-              : 'Settings ' '${authProvider.currentuser!.name}'),
+              ? '${AppLocalizations.of(context)!.to_do_list}'
+                  ' ${authProvider.currentuser!.name}'
+              : '${AppLocalizations.of(context)!.settings}'
+                  ' ${authProvider.currentuser!.name}'),
+>>>>>>> Stashed changes
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),

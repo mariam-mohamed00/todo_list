@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,12 +28,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
+  late AppConfigProvider provider;
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<AppConfigProvider>(context);
-
+    provider = Provider.of<AppConfigProvider>(context);
+    initSharedPref();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.loginScreen,
@@ -44,5 +46,19 @@ class MyApp extends StatelessWidget {
       darkTheme: MyTheme.darkMode,
       themeMode: provider.appTheme,
     );
+  }
+
+  Future<void> initSharedPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    var language = prefs.getString('language');
+    var isDark = prefs.getBool('isDark');
+    if (language != null) {
+      provider.changeLanguage(language);
+    }
+    if (isDark == true) {
+      provider.changeTheme(ThemeMode.dark);
+    } else {
+      provider.changeTheme(ThemeMode.light);
+    }
   }
 }

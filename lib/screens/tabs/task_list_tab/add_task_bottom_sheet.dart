@@ -57,6 +57,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           }
                           return null;
                         },
+                        style: TextStyle(
+                            color: provider.appTheme == ThemeMode.light
+                                ? MyTheme.blackColor
+                                : MyTheme.whiteColor),
                         decoration: InputDecoration(
                             hintText:
                                 AppLocalizations.of(context)!.enter_task_title,
@@ -78,6 +82,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           }
                           return null;
                         },
+                        style: TextStyle(
+                            color: provider.appTheme == ThemeMode.light
+                                ? MyTheme.blackColor
+                                : MyTheme.whiteColor),
                         maxLines: 4,
                         decoration: InputDecoration(
                             hintText:
@@ -124,7 +132,10 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                           shape: const RoundedRectangleBorder()),
                       child: Text(
                         AppLocalizations.of(context)!.add,
-                        style: Theme.of(context).textTheme.titleLarge,
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                            color: provider.appTheme == ThemeMode.light
+                                ? MyTheme.blackColor
+                                : MyTheme.whiteColor),
                       ),
                     )
                   ]))
@@ -138,10 +149,25 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       // add task to firebase
       Task task = Task(
           title: title, description: description, dateTime: selectedDateTime);
+<<<<<<< Updated upstream
+      FirebaseUtils.addTaskToFireStore(task).timeout(
+        const Duration(microseconds: 500),
+        onTimeout: () {
+          Fluttertoast.showToast(
+              msg: "Task added succeessfully",
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.red,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          listProvider.getAllTasksFromFireStore();
+          Navigator.pop(context);
+=======
       var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
       DialogUtils.showLoading(
           context,
-          'Waiting...',
+          AppLocalizations.of(context)!.waiting,
           provider.appTheme == ThemeMode.light
               ? MyTheme.whiteColor
               : MyTheme.backgroundDark);
@@ -149,7 +175,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
           .then((value) {
         DialogUtils.hideLoading(context);
 
-        DialogUtils.showMessage(context, 'Task added succeessfully',
+        DialogUtils.showMessage(
+            context, AppLocalizations.of(context)!.task_added_successfully,
             textColor: provider.appTheme == ThemeMode.light
                 ? MyTheme.blackColor
                 : MyTheme.whiteColor,
@@ -157,15 +184,17 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
             backgroundColor: provider.appTheme == ThemeMode.light
                 ? MyTheme.whiteColor
                 : MyTheme.backgroundDark,
-            titleMessage: 'Success',
-            posActionName: 'ok', posAction: () {
+            titleMessage: AppLocalizations.of(context)!.success,
+            posActionName: AppLocalizations.of(context)!.ok, posAction: () {
           Navigator.of(context).pop();
-        });}).timeout(
+        });
+      }).timeout(
         const Duration(microseconds: 100),
         onTimeout: () {
           listProvider
               .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
-      },
+>>>>>>> Stashed changes
+        },
       );
     }
   }

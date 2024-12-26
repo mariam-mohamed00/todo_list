@@ -48,7 +48,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       appBar: AppBar(
         toolbarHeight: 56,
         title: Text(
-          'Edit Task',
+          AppLocalizations.of(context)!.edit_task,
           style: Theme.of(context).textTheme.titleLarge,
         ),
         iconTheme: IconThemeData(color: MyTheme.whiteColor),
@@ -72,7 +72,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                 children: [
                   SizedBox(height: screenSize.height * 0.05),
                   Text(
-                    'Edit Task',
+                    AppLocalizations.of(context)!.edit_task,
                     style: Theme.of(context).textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -121,8 +121,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
                                   AppLocalizations.of(context)!.select_time,
-                                  style:
-                                      Theme.of(context).textTheme.titleSmall),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(color: MyTheme.blackColor)),
                             ),
                             GestureDetector(
                               onTap: () async {
@@ -141,8 +143,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                 child: Text(
                                     '${selectedDateTime.day}/${selectedDateTime.month}/${selectedDateTime.year}',
                                     textAlign: TextAlign.center,
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall!
+                                        .copyWith(color: MyTheme.blackColor)),
                               ),
                             ),
                             ElevatedButton(
@@ -155,8 +159,11 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
                                   backgroundColor: MyTheme.primaryLight,
                                   shape: const RoundedRectangleBorder()),
                               child: Text(
-                                'Edit',
-                                style: Theme.of(context).textTheme.titleLarge,
+                                AppLocalizations.of(context)!.edit,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleLarge!
+                                    .copyWith(color: MyTheme.whiteColor),
                               ),
                             )
                           ]))
@@ -178,7 +185,7 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
       var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
       DialogUtils.showLoading(
           context,
-          'Waiting...',
+          AppLocalizations.of(context)!.waiting,
           provider.appTheme == ThemeMode.light
               ? MyTheme.whiteColor
               : MyTheme.backgroundDark);
@@ -186,7 +193,8 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
           .then((value) {
         DialogUtils.hideLoading(context);
 
-        DialogUtils.showMessage(context, 'Task edit succeessfully',
+        DialogUtils.showMessage(
+            context, AppLocalizations.of(context)!.task_edit_successfully,
             textColor: provider.appTheme == ThemeMode.light
                 ? MyTheme.blackColor
                 : MyTheme.whiteColor,
@@ -194,12 +202,10 @@ class _EditTaskScreenState extends State<EditTaskScreen> {
             backgroundColor: provider.appTheme == ThemeMode.light
                 ? MyTheme.whiteColor
                 : MyTheme.backgroundDark,
-            titleMessage: 'Success',
-            posActionName: 'ok', posAction: () {
+            titleMessage: AppLocalizations.of(context)!.success,
+            posActionName: AppLocalizations.of(context)!.ok, posAction: () {
           Navigator.of(context).pop();
         });
-        // listProvider
-        //     .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
       }).timeout(
         const Duration(microseconds: 100),
         onTimeout: () {
