@@ -8,7 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +23,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ListProvider()),
         ChangeNotifierProvider(create: (_) => UserAuthProvider()),
   ],
-  child: const MyApp(),
+  child:  MyApp(),
   ));
 }
 
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<AppConfigProvider>(context);
-    initSharedPref();
+    // initSharedPref();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.loginScreen,
@@ -48,17 +48,17 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future<void> initSharedPref() async {
-    final prefs = await SharedPreferences.getInstance();
-    var language = prefs.getString('language');
-    var isDark = prefs.getBool('isDark');
-    if (language != null) {
-      provider.changeLanguage(language);
-    }
-    if (isDark == true) {
-      provider.changeTheme(ThemeMode.dark);
-    } else {
-      provider.changeTheme(ThemeMode.light);
-    }
-  }
+  // Future<void> initSharedPref() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   var language = prefs.getString('language');
+  //   var isDark = prefs.getBool('isDark');
+  //   if (language != null) {
+  //     provider.changeLanguage(language);
+  //   }
+  //   if (isDark == true) {
+  //     provider.changeTheme(ThemeMode.dark);
+  //   } else {
+  //     provider.changeTheme(ThemeMode.light);
+  //   }
+  // }
 }

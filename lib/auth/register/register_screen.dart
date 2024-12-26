@@ -121,6 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             password == confirmPassword)
                         ? DefaultElevatedButton(
                             isDisabled: false,
+                            labelColor: MyTheme.whiteColor,
                             backgroundColor: MyTheme.primaryLight,
                             label: AppLocalizations.of(context)!.register,
                             onPressed: () {

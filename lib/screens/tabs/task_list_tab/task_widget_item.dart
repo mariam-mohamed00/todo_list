@@ -27,26 +27,9 @@ class _TaskWidgetItemState extends State<TaskWidgetItem> {
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppConfigProvider>(context);
-<<<<<<< Updated upstream
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Slidable(
-        startActionPane: ActionPane(
-          extentRatio: 0.24,
-          motion: const DrawerMotion(),
-          children: [
-            SlidableAction(
-              onPressed: (context) {},
-              backgroundColor: MyTheme.redColor,
-              foregroundColor: MyTheme.whiteColor,
-              icon: Icons.delete,
-              label: AppLocalizations.of(context)!.delete,
-              spacing: 12,
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  bottomLeft: Radius.circular(15)),
-=======
+
     var listProvider = Provider.of<ListProvider>(context);
+
     return InkWell(
       onTap: () {
         Navigator.of(context)
@@ -155,60 +138,7 @@ class _TaskWidgetItemState extends State<TaskWidgetItem> {
                         ),
                 )
               ],
->>>>>>> Stashed changes
             ),
-          ],
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              color: provider.appTheme == ThemeMode.light
-                  ? MyTheme.whiteColor
-                  : MyTheme.blackDark),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                color: MyTheme.primaryLight,
-                height: MediaQuery.of(context).size.height * 0.09,
-                width: MediaQuery.of(context).size.width * 0.01,
-              ),
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      task.title ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall!
-                          .copyWith(color: MyTheme.primaryLight),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(task.description ?? '',
-                        style: Theme.of(context).textTheme.titleSmall),
-                  ),
-                ],
-              )),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 7, horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: MyTheme.primaryLight,
-                ),
-                child: Icon(
-                  Icons.check,
-                  color: MyTheme.whiteColor,
-                  size: 30,
-                ),
-              )
-            ],
           ),
         ),
       ),

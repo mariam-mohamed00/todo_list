@@ -7,6 +7,7 @@ import 'package:app_todo_list/screens/tabs/task_list_tab/task_list_tab_screen.da
 import 'package:app_todo_list/screens/tabs/setting_tab/setting_tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,15 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
         ],
         title: Text(
-<<<<<<< Updated upstream
-          AppLocalizations.of(context)!.to_do_list,
-=======
           (index == 0
               ? '${AppLocalizations.of(context)!.to_do_list}'
                   ' ${authProvider.currentuser!.name}'
               : '${AppLocalizations.of(context)!.settings}'
                   ' ${authProvider.currentuser!.name}'),
->>>>>>> Stashed changes
+
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),

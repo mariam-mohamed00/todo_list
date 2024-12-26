@@ -86,6 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     (emailValid.hasMatch(email) && password.length >= 8)
                         ? DefaultElevatedButton(
+                          labelColor: MyTheme.whiteColor,
                             isDisabled: false,
                             backgroundColor: MyTheme.primaryLight,
                             label: AppLocalizations.of(context)!.login,

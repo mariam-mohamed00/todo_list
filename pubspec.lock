@@ -153,8 +153,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
-<<<<<<< Updated upstream
-=======
   ffi:
     dependency: transitive
     description:
@@ -195,7 +193,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.5"
->>>>>>> Stashed changes
   firebase_core:
     dependency: "direct main"
     description:

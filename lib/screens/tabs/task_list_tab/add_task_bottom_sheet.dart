@@ -133,9 +133,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                       child: Text(
                         AppLocalizations.of(context)!.add,
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                            color: provider.appTheme == ThemeMode.light
-                                ? MyTheme.blackColor
-                                : MyTheme.whiteColor),
+                            color: MyTheme.whiteColor),
                       ),
                     )
                   ]))
@@ -149,21 +147,7 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
       // add task to firebase
       Task task = Task(
           title: title, description: description, dateTime: selectedDateTime);
-<<<<<<< Updated upstream
-      FirebaseUtils.addTaskToFireStore(task).timeout(
-        const Duration(microseconds: 500),
-        onTimeout: () {
-          Fluttertoast.showToast(
-              msg: "Task added succeessfully",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          listProvider.getAllTasksFromFireStore();
-          Navigator.pop(context);
-=======
+
       var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
       DialogUtils.showLoading(
           context,
@@ -193,7 +177,6 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
         onTimeout: () {
           listProvider
               .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
->>>>>>> Stashed changes
         },
       );
     }
