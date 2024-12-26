@@ -1,11 +1,12 @@
-import 'package:app_todo_list/firebase_utils.dart';
+import 'package:app_todo_list/providers/auth_provider.dart';
+import 'package:app_todo_list/utils/dialog_utils.dart';
+import 'package:app_todo_list/utils/firebase_utils.dart';
 import 'package:app_todo_list/model/task.dart';
 import 'package:app_todo_list/my_theme.dart';
 import 'package:app_todo_list/providers/list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../../../providers/app_config_provider.dart';
 
 class AddTaskBottomSheet extends StatefulWidget {
@@ -22,10 +23,11 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   String title = '';
   String description = '';
   late ListProvider listProvider;
+  late AppConfigProvider provider;
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<AppConfigProvider>(context);
+    provider = Provider.of<AppConfigProvider>(context);
     listProvider = Provider.of<ListProvider>(context);
 
     return Container(
@@ -113,6 +115,8 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
                     ),
                     ElevatedButton(
                       onPressed: () {
+                        setState(() {});
+
                         addTask();
                       },
                       style: ElevatedButton.styleFrom(
@@ -130,25 +134,38 @@ class _AddTaskBottomSheetState extends State<AddTaskBottomSheet> {
   }
 
   void addTask() {
-
     if (formKey.currentState!.validate() == true) {
       // add task to firebase
       Task task = Task(
           title: title, description: description, dateTime: selectedDateTime);
-      FirebaseUtils.addTaskToFireStore(task).timeout(
-        const Duration(microseconds: 500),
+      var authProvider = Provider.of<UserAuthProvider>(context, listen: false);
+      DialogUtils.showLoading(
+          context,
+          'Waiting...',
+          provider.appTheme == ThemeMode.light
+              ? MyTheme.whiteColor
+              : MyTheme.backgroundDark);
+      FirebaseUtils.addTaskToFireStore(task, authProvider.currentuser?.id ?? '')
+          .then((value) {
+        DialogUtils.hideLoading(context);
+
+        DialogUtils.showMessage(context, 'Task added succeessfully',
+            textColor: provider.appTheme == ThemeMode.light
+                ? MyTheme.blackColor
+                : MyTheme.whiteColor,
+            actionColor: MyTheme.primaryLight,
+            backgroundColor: provider.appTheme == ThemeMode.light
+                ? MyTheme.whiteColor
+                : MyTheme.backgroundDark,
+            titleMessage: 'Success',
+            posActionName: 'ok', posAction: () {
+          Navigator.of(context).pop();
+        });}).timeout(
+        const Duration(microseconds: 100),
         onTimeout: () {
-          Fluttertoast.showToast(
-              msg: "Task added succeessfully",
-              toastLength: Toast.LENGTH_LONG,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.red,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          listProvider.getAllTasksFromFireStore();
-          Navigator.pop(context);
-        },
+          listProvider
+              .getAllTasksFromFireStore(authProvider.currentuser?.id ?? '');
+      },
       );
     }
   }
