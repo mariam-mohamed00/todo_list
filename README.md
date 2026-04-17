@@ -1,16 +1,43 @@
-# app_todo_list
+# 📝 ToDo List App
 
-A new Flutter project.
+A modern, full-featured ToDo List application built with **Flutter** and **Firebase**. This app helps users stay organized by managing their daily tasks with ease, featuring real-time synchronization, dark mode support, and multi-language capabilities.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Features
 
-A few resources to get you started if this is your first Flutter project:
+- **🔐 User Authentication**: Secure login and registration powered by Firebase Authentication.
+- **☁️ Real-time Cloud Sync**: Tasks are stored in Google Cloud Firestore, ensuring your data is synced across devices.
+- **📅 Calendar View**: Interactive timeline to filter and manage tasks by specific dates.
+- **🌓 Dynamic Theming**: Beautifully designed Light and Dark modes with automatic persistence.
+- **🌍 Localization**: Full support for multiple languages (English & Arabic).
+- **🧹 Task Management**:
+  - Add new tasks with titles and descriptions.
+  - Mark tasks as completed with a single tap.
+  - Delete tasks using intuitive slidable actions.
+  - Edit existing tasks effortlessly.
+- **💾 Persistent Settings**: Remembers your theme and language preferences using Shared Preferences.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Built With
+
+- **Flutter**: UI Framework.
+- **Firebase**:
+  - **Firestore**: NoSQL Database for task storage.
+  - **Auth**: User authentication.
+- **Provider**: Robust state management.
+- **Shared Preferences**: Local storage for user settings.
+- **Slidable**: Interactive list item actions.
+- **Calendar Timeline**: Elegant date selection.
+
+---
+
+## 📸 Screenshots
+
+View the full application gallery here: **[Google Drive Screenshots](https://drive.google.com/drive/folders/10DdQ2jk5HFwXGX07obBBQQXkln5WfShx)**
+
+| Light Mode | Dark Mode |
+| :---: | :---: |
+| ![Light Mode](https://raw.githubusercontent.com/mariam-mohamed00/todo_list/main/assets/images/splash_light.png) | ![Dark Mode](https://raw.githubusercontent.com/mariam-mohamed00/todo_list/main/assets/images/splash_dark.png) |
+*(Note: Replace with actual UI screenshots for better visual representation)*
