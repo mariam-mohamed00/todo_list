@@ -36,7 +36,3 @@ A modern, full-featured ToDo List application built with **Flutter** and **Fireb
 ## 📸 Screenshots
 
 View the full application gallery here: **[Google Drive Screenshots](https://drive.google.com/drive/folders/10DdQ2jk5HFwXGX07obBBQQXkln5WfShx)**
-
-| Light Mode | Dark Mode |
-| :---: | :---: |
-| ![Light Mode](https://raw.githubusercontent.com/mariam-mohamed00/todo_list/main/assets/images/splash_light.png) | ![Dark Mode](https://raw.githubusercontent.com/mariam-mohamed00/todo_list/main/assets/images/splash_dark.png) |
