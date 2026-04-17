@@ -40,4 +40,3 @@ View the full application gallery here: **[Google Drive Screenshots](https://dri
 | Light Mode | Dark Mode |
 | :---: | :---: |
 | ![Light Mode](https://raw.githubusercontent.com/mariam-mohamed00/todo_list/main/assets/images/splash_light.png) | ![Dark Mode](https://raw.githubusercontent.com/mariam-mohamed00/todo_list/main/assets/images/splash_dark.png) |
-*(Note: Replace with actual UI screenshots for better visual representation)*
